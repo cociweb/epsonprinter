@@ -16,6 +16,7 @@ api.update()
 ### Get actual values
 ```python
 #regular colours
+photoblack = api.getSensorValue("photoblack")
 black = api.getSensorValue("black")
 magenta = api.getSensorValue("magenta")
 cyan = api.getSensorValue("cyan")
