@@ -8,6 +8,7 @@ setuptools.setup(
     version="0.0.10",
     author="ThaStealth",
     author_email="author@example.com",
+    install_requires=["beautifulsoup4"],
     description="Communication package for Epson Workforce printer",
     long_description=long_description,
     long_description_content_type="text/markdown",
