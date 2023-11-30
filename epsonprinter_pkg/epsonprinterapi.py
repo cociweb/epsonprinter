@@ -1,19 +1,20 @@
 import urllib.request
+from bs4 import BeautifulSoup
 
 class EpsonPrinterAPI(object):
     def __init__(self, ip):
         """Initialize the link to the printer status page."""
         self._resource = "http://" + ip + "/PRESENTATION/HTML/TOP/PRTINFO.HTML"
-        self.data = None
         self.available = True
+        self.soup = None
         self.update()
 
     def getSensorValue(self, sensor):
-        """To make it the user easier to configre the cartridge type."""
-        sensorCorrected = "";
-        #_LOGGER.debug("Color to fetch: " + sensor)
+        """To make it the user easier to configure the cartridge type."""
         if sensor == "black":
-            sensorCorrected = "K"
+            sensorCorrected = "BK"
+        elif sensor == "photoblack":
+            sensorCorrected = "PB"
         elif sensor == "magenta":
             sensorCorrected = "M"
         elif sensor == "cyan":
@@ -26,15 +27,17 @@ class EpsonPrinterAPI(object):
             return 0;
 
         try:
-            search = "Ink_" + sensorCorrected + ".PNG' height='"
-            result = self.data.index(search)
-            startPos = result + len(search)
-            valueRaw = self.data[startPos:startPos + 2]
-            """In case the value is a single digit, we will get a ' char, remove it."""
-            return int(valueRaw.replace("'", "")) * 2
+            for li in self.soup.find_all("li", class_="tank"):
+                if sensorCorrected == "Waste":
+                    div = li.find("div", class_="mbicn")
+                else:
+                    div = li.find("div", class_="clrname")
+
+                if div != None and (div.contents[0] == sensorCorrected or sensorCorrected == "Waste"):
+                    return int(li.find("div", class_="tank").findChild()["height"]) * 2
         except Exception as e:
-            #_LOGGER.error("Unable to fetch level from data: " + str(e))
             return 0
+
 
     def get_mac(self):
         """Get the mac of the printer."""
@@ -51,10 +54,12 @@ class EpsonPrinterAPI(object):
         try:
             """Just fetch the HTML page."""
             response = urllib.request.urlopen(self._resource)
-            self.data = response.read().decode("utf-8")
+            data = response.read()
+            response.close()
+
+            self.soup = BeautifulSoup(data, "html.parser")
             self.available = True
         except Exception as e:
-            #_LOGGER.error("Unable to fetch data from your printer: " + str(e))
             self.available = False
 
 
