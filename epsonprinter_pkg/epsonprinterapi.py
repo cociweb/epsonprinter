@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 class EpsonPrinterAPI(object):
     def __init__(self, ip, protocol="http", verify_ssl = False):
         """Initialize the link to the printer status page."""
-        self._resource = protocol+"://" + ip + ":" + port + "/PRESENTATION/HTML/TOP/PRTINFO.HTML"
+        self._resource = protocol+"://" + ip + "/PRESENTATION/HTML/TOP/PRTINFO.HTML"
         self.protocol = protocol
         self.verify_ssl = verify_ssl
         self.available = True
