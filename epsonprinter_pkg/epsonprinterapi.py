@@ -3,9 +3,10 @@ import ssl
 from bs4 import BeautifulSoup
 
 class EpsonPrinterAPI(object):
-    def __init__(self, ip, protocol="https", verify_ssl = False):
+    def __init__(self, ip, protocol="http", verify_ssl = False):
         """Initialize the link to the printer status page."""
         self._resource = protocol+"://" + ip + ":" + port + "/PRESENTATION/HTML/TOP/PRTINFO.HTML"
+        self.protocol = protocol
         self.verify_ssl = verify_ssl
         self.available = True
         self.soup = None
@@ -61,6 +62,8 @@ class EpsonPrinterAPI(object):
                 ctx.verify_mode = ssl.CERT_NONE
             else:
                 ctx=ssl.create_default_context()
+            if self.protocol = "http":
+                ctx=None
             
             response = urllib.request.urlopen(self._resource, context=ctx)
             
