@@ -26,3 +26,10 @@ yellow = api.getSensorValue("yellow")
 clean = api.getSensorValue("clean")
 ```
 
+
+<!-- ACKNOWLEDGMENTS -->
+## Acknowledgments
+
+Below are a list of resources that I used to assist with this project.
+
+* This api wouldn't exist without the original author [ThaStealth](https://github.com/thastealth)
