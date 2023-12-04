@@ -1,10 +1,12 @@
 import urllib.request
+import ssl
 from bs4 import BeautifulSoup
 
 class EpsonPrinterAPI(object):
-    def __init__(self, ip):
+    def __init__(self, ip, protocol="https", verify_ssl = False):
         """Initialize the link to the printer status page."""
-        self._resource = "http://" + ip + "/PRESENTATION/HTML/TOP/PRTINFO.HTML"
+        self._resource = protocol+"://" + ip + ":" + port + "/PRESENTATION/HTML/TOP/PRTINFO.HTML"
+        self.verify_ssl = verify_ssl
         self.available = True
         self.soup = None
         self.update()
@@ -53,7 +55,15 @@ class EpsonPrinterAPI(object):
     def update(self):
         try:
             """Just fetch the HTML page."""
-            response = urllib.request.urlopen(self._resource)
+            if self.verify_ssl != True:
+                ctx = ssl.create_default_context()
+                ctx.check_hostname = False
+                ctx.verify_mode = ssl.CERT_NONE
+            else:
+                ctx=ssl.create_default_context()
+            
+            response = urllib.request.urlopen(self._resource, context=ctx)
+            
             data = response.read()
             response.close()
 
