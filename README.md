@@ -3,9 +3,11 @@ This package can be used to scrape the ink levels from your Epson Workforce prin
 ## Usage:
 
 ### Connection
-Create the API object with the IP address of the printer, on connect the values are fetched from the printer
+Create the API object with the IP address of the printer, on connect the values are fetched from the printer.
+The protocol can be http or https. The default is http.
+We can verify (or not) the ssl certificate chain if the protocol is not http if we define the verify_ssl paramter.
 ```python
-api = EpsonPrinterAPI(<IP>)
+api = EpsonPrinterAPI(<IP>, [[protocol={"http"|"https"}, [verify_ssl={False|True}]])
 ```
 
 Fetches the latest values from the printer
