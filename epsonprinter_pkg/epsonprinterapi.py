@@ -62,7 +62,7 @@ class EpsonPrinterAPI(object):
                 ctx.verify_mode = ssl.CERT_NONE
             else:
                 ctx=ssl.create_default_context()
-            if self.protocol = "http":
+            if self.protocol == "http":
                 ctx=None
             
             response = urllib.request.urlopen(self._resource, context=ctx)
